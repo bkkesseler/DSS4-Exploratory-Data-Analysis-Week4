@@ -49,7 +49,7 @@ NEI_by_year <- aggregate(Emissions ~ year, NEI, sum)
 png(filename="plot1.png",width=480,height=480,units="px")
 
 ## Plot the data
-with(NEI_by_year,
+xvals <- with(NEI_by_year,
      barplot(
              Emissions,
              year,
@@ -58,6 +58,13 @@ with(NEI_by_year,
              ylab="PM2.5 Emissions (in tons)",
              main="Total US PM2.5 Emissions")
      )
+
+lines(xvals,
+      predict(
+              lm(NEI_by_year$Emissions ~ NEI_by_year$year)
+              ,new.data = NEI_by_year$year)
+      )
+
 
 ## Close the device
 dev.off()
