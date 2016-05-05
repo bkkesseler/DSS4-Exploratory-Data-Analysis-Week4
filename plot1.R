@@ -4,6 +4,12 @@
 ## Clear the workspace
 rm(list = ls())
 
+## Load libraries as needed
+if (!require("RColorBrewer")) {
+        install.packages("RColorBrewer")
+        library(RColorBrewer)
+}
+
 ## Check to see if the file is present, if it is, continue
 ## If the file is not present, check to see if the zip file is present, if it 
 ##   is, unzip the file
@@ -35,3 +41,29 @@ SCC <- readRDS("Source_Classification_Code.rds")
 ## 1999 to 2008? Using the base plotting system, make a plot showing the total
 ## PM2.5 emission from all sources for each of the years 1999, 2002, 2005, 
 ## and 2008.
+
+## Aggregate the data by year
+NEI_by_year <- aggregate(Emissions ~ year, NEI, sum)
+
+## Set up the png device
+png(filename="plot1.png",width=480,height=480,units="px")
+
+## Plot the data
+with(NEI_by_year,
+     barplot(
+             Emissions,
+             year,
+             names.arg=year[1:4],
+             xlab="Year",
+             ylab="PM2.5 Emissions (in tons)",
+             main="Total US PM2.5 Emissions")
+     )
+
+## Close the device
+dev.off()
+
+## Clear the workspace
+rm(list = ls())
+
+## Conclusion is that total emissions from PM2.5 have decreased each year, from
+## 1999 to 2008, for the years available (1999, 2002, 2005, 2008)
